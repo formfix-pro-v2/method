@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Veronica Method — Offline</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(180deg, #f2e4e8 0%, #f0dde3 50%, #ede0df 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      color: #4a3f44;
+    }
+    .card {
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(240,227,232,0.5);
+      border-radius: 24px;
+      padding: 40px 28px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      margin-bottom: 20px;
+    }
+    .icon { font-size: 48px; margin-bottom: 12px; }
+    h1 { font-size: 26px; margin-bottom: 6px; font-weight: 600; }
+    p { color: #7b6870; font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+    .btn-primary {
+      background: linear-gradient(135deg, #d8a7b5, #c9929f);
+      color: white;
+      border: none;
+      padding: 12px 32px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-block;
+      text-decoration: none;
+    }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-outline {
+      background: transparent;
+      color: #b98fa1;
+      border: 1px solid #f0e3e8;
+      padding: 10px 24px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-block;
+      text-decoration: none;
+      margin-top: 8px;
+    }
+    .tip { font-size: 11px; color: #b98fa1; margin-top: 16px; font-style: italic; }
+    .exercises { text-align: left; margin-top: 16px; }
+    .exercises h3 { font-size: 14px; color: #b98fa1; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 12px; font-weight: 700; }
+    .exercise-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px; border-radius: 16px;
+      background: rgba(255,255,255,0.5); border: 1px solid rgba(240,227,232,0.5);
+      margin-bottom: 8px;
+    }
+    .exercise-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: #fdf2f5; display: flex; align-items: center; justify-content: center;
+      color: #d8a7b5; font-size: 12px; font-weight: 700; flex-shrink: 0;
+    }
+    .exercise-name { font-size: 13px; color: #4a3f44; font-weight: 500; }
+    .exercise-reps { font-size: 10px; color: #b98fa1; text-transform: uppercase; letter-spacing: 0.1em; }
+    .quote {
+      font-style: italic; color: #6f5a62; font-size: 13px;
+      padding: 16px; border-left: 3px solid #d8a7b5;
+      background: rgba(253,242,245,0.5); border-radius: 0 12px 12px 0;
+      margin-bottom: 20px; text-align: left;
+    }
+    .status { display: flex; align-items: center; gap: 6px; justify-content: center; margin-bottom: 16px; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #e8a87c; animation: pulse 2s infinite; }
+    .status-text { font-size: 11px; color: #b98fa1; font-weight: 500; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="status">
+      <div class="status-dot"></div>
+      <span class="status-text">No internet connection</span>
+    </div>
+
+    <div class="icon">🧘‍♀️</div>
+    <h1>You're Offline</h1>
+    <p>Your progress is saved locally. Here are some exercises you can do right now — no internet needed.</p>
+
+    <div class="quote">
+      "Your body doesn't need Wi-Fi to get stronger. Keep moving."
+    </div>
+
+    <div class="exercises">
+      <h3>Quick Offline Routine (10 min)</h3>
+      <div class="exercise-item">
+        <div class="exercise-num">1</div>
+        <div>
+          <div class="exercise-name">Gentle March in Place</div>
+          <div class="exercise-reps">2 minutes</div>
+        </div>
+      </div>
+      <div class="exercise-item">
+        <div class="exercise-num">2</div>
+        <div>
+          <div class="exercise-name">Diaphragmatic Breathing</div>
+          <div class="exercise-reps">2 minutes</div>
+        </div>
+      </div>
+      <div class="exercise-item">
+        <div class="exercise-num">3</div>
+        <div>
+          <div class="exercise-name">Cat-Cow Flow</div>
+          <div class="exercise-reps">10 cycles</div>
+        </div>
+      </div>
+      <div class="exercise-item">
+        <div class="exercise-num">4</div>
+        <div>
+          <div class="exercise-name">Chair Squat</div>
+          <div class="exercise-reps">12 reps</div>
+        </div>
+      </div>
+      <div class="exercise-item">
+        <div class="exercise-num">5</div>
+        <div>
+          <div class="exercise-name">Wall Push-Up</div>
+          <div class="exercise-reps">12 reps</div>
+        </div>
+      </div>
+      <div class="exercise-item">
+        <div class="exercise-num">6</div>
+        <div>
+          <div class="exercise-name">Child's Pose Rest</div>
+          <div class="exercise-reps">2 minutes</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 24px;">
+      <button class="btn-primary" onclick="window.location.reload()">Try Reconnecting</button>
+    </div>
+    <a href="/dashboard" class="btn-outline">Try Dashboard</a>
+
+    <p class="tip">💡 Previously visited pages may still work from cache. Try tapping Dashboard above.</p>
+  </div>
+</body>
+</html>

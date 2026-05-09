@@ -1,0 +1,76 @@
+{
+  "id": "/",
+  "name": "Veronica Method — Menopause Wellness",
+  "short_name": "Veronica",
+  "description": "Personalized exercises, budget meal plans & supplement guide for women 40+. Evidence-based program for hot flashes, sleep, joint pain, pelvic health and more.",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#e5d5da",
+  "theme_color": "#a8687a",
+  "orientation": "portrait",
+  "categories": ["health", "fitness", "lifestyle"],
+  "lang": "en",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Start Session",
+      "short_name": "Session",
+      "url": "/session",
+      "icons": [{ "src": "./icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Daily Check-In",
+      "short_name": "Check-In",
+      "url": "/checkin",
+      "icons": [{ "src": "./icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Meal Plan",
+      "short_name": "Meals",
+      "url": "/nutrition",
+      "icons": [{ "src": "./icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    }
+  ],
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Veronica Method Dashboard"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Veronica Method Program"
+    }
+  ],
+  "serviceworker": {
+    "src": "./sw.js",
+    "scope": "/"
+  }
+}
