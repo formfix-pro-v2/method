@@ -316,12 +316,12 @@ CREATE INDEX IF NOT EXISTS idx_push_subs_user ON public.push_subscriptions(user_
 -- HELPER: updated_at auto-trigger for tables that need it
 -- ============================================================
 CREATE OR REPLACE FUNCTION public.set_updated_at()
-RETURNS TRIGGER AS $
+RETURNS TRIGGER AS $$
 BEGIN
   NEW.updated_at = NOW();
   RETURN NEW;
 END;
-$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS set_profiles_updated_at ON public.profiles;
 CREATE TRIGGER set_profiles_updated_at
@@ -332,6 +332,53 @@ DROP TRIGGER IF EXISTS set_journal_updated_at ON public.journal_entries;
 CREATE TRIGGER set_journal_updated_at
   BEFORE UPDATE ON public.journal_entries
   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+
+-- ============================================================
+-- GRANTS — required for Supabase Data API (PostgREST)
+-- Without explicit GRANTs, roles cannot access tables via API.
+-- Enforced on all projects from October 30, 2026.
+-- ============================================================
+
+-- profiles
+GRANT SELECT, INSERT, UPDATE ON public.profiles TO authenticated;
+GRANT SELECT ON public.profiles TO anon;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.profiles TO service_role;
+
+-- checkins
+GRANT SELECT, INSERT, UPDATE ON public.checkins TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.checkins TO service_role;
+
+-- sessions
+GRANT SELECT, INSERT ON public.sessions TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.sessions TO service_role;
+
+-- journal_entries
+GRANT SELECT, INSERT, UPDATE ON public.journal_entries TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.journal_entries TO service_role;
+
+-- favorites
+GRANT SELECT, INSERT, DELETE ON public.favorites TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.favorites TO service_role;
+
+-- achievements
+GRANT SELECT, INSERT ON public.achievements TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.achievements TO service_role;
+
+-- push_subscriptions
+GRANT SELECT, INSERT, DELETE ON public.push_subscriptions TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.push_subscriptions TO service_role;
+
+-- reminders
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.reminders TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.reminders TO service_role;
+
+-- referrals
+GRANT SELECT, INSERT ON public.referrals TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.referrals TO service_role;
+
+-- sync_log
+GRANT SELECT, INSERT, UPDATE ON public.sync_log TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.sync_log TO service_role;
 
 -- ============================================================
 -- BACKUP STRATEGY
