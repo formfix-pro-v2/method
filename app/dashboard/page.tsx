@@ -13,6 +13,7 @@ import FavoriteButton from "@/components/FavoriteButton";
 import SwapMealButton from "@/components/SwapMealButton";
 import { useTranslation } from "@/lib/i18n/useTranslation";
 import { playComplete } from "@/lib/sounds";
+import { isPromoActive } from "@/lib/promo";
 import SectionErrorBoundary from "@/components/SectionErrorBoundary";
 
 type QuizData = {
@@ -493,7 +494,7 @@ export default function DashboardPage() {
     const expiryDate = localStorage.getItem("expiryDate");
     const isActive = premiumFlag && (!expiryDate || new Date(expiryDate) > new Date());
     const hasPaidPlan = savedPlan === "glow" || savedPlan === "elite";
-    setIsPremium(isActive && hasPaidPlan);
+    setIsPremium(isPromoActive() || (isActive && hasPaidPlan));
     if (raw) {
       try {
         setData(JSON.parse(raw));

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { isPromoActive } from "@/lib/promo";
 
 function CountdownTimer() {
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
@@ -49,6 +50,7 @@ function CountdownTimer() {
 
 function PricingContent() {
   const params = useSearchParams();
+  const promo = isPromoActive();
 
   const locked =
     params.get("locked") === "true";
@@ -109,6 +111,23 @@ function PricingContent() {
         </section>
       )}
 
+      {/* PROMO BANNER */}
+      {promo && (
+        <section className="soft-card p-8 mb-10 border-2 border-green-200 bg-green-50/30 text-center">
+          <div className="text-4xl mb-3">🎉</div>
+          <h2 className="text-3xl text-[#4a3f44] mb-2 font-semibold">
+            Free Access — Launch Promo
+          </h2>
+          <p className="text-[#7b6870] text-lg mb-4">
+            All programs are currently <strong>100% free</strong> during our launch period.
+            Enjoy full access to every feature — no payment required.
+          </p>
+          <Link href="/quiz" className="btn-primary inline-block">
+            Start Free Now
+          </Link>
+        </section>
+      )}
+
       {/* HERO */}
       <section className="text-center mb-14">
         <p className="uppercase tracking-[0.25em] text-sm text-[#b98fa1] mb-4">
@@ -124,7 +143,7 @@ function PricingContent() {
           the transformation path that fits you best.
         </p>
 
-        <CountdownTimer />
+        {!promo && <CountdownTimer />}
       </section>
 
       {/* PLAN CARDS */}
@@ -162,14 +181,15 @@ function PricingContent() {
             </div>
 
             <Link
-              href={plan.href}
-              className={
+              href={promo ? "#" : plan.href}
+              className={`${
                 plan.name === "Elite"
                   ? "btn-primary w-full text-center block"
                   : "btn-outline w-full text-center block"
-              }
+              } ${promo ? "opacity-40 grayscale pointer-events-none" : ""}`}
+              aria-disabled={promo}
             >
-              {plan.cta}
+              {promo ? "Coming Soon" : plan.cta}
             </Link>
           </div>
         ))}
@@ -267,17 +287,19 @@ function PricingContent() {
 
         <div className="flex flex-wrap gap-4 justify-center">
           <Link
-            href="/plans/glow"
-            className="btn-outline"
+            href={promo ? "#" : "/plans/glow"}
+            className={`btn-outline ${promo ? "opacity-40 grayscale pointer-events-none" : ""}`}
+            aria-disabled={promo}
           >
-            View Glow
+            {promo ? "Coming Soon" : "View Glow"}
           </Link>
 
           <Link
-            href="/plans/elite"
-            className="btn-primary"
+            href={promo ? "#" : "/plans/elite"}
+            className={`btn-primary ${promo ? "opacity-40 grayscale pointer-events-none" : ""}`}
+            aria-disabled={promo}
           >
-            View Elite
+            {promo ? "Coming Soon" : "View Elite"}
           </Link>
         </div>
       </section>

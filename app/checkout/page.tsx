@@ -6,6 +6,7 @@ import Link from "next/link";
 import { getPlan, activatePlan } from "@/lib/checkout";
 import { activateSubscription } from "@/lib/subscription";
 import { createClient } from "@/lib/supabase/client";
+import { isPromoActive } from "@/lib/promo";
 import type { User } from "@supabase/supabase-js";
 
 function CheckoutContent() {
@@ -17,6 +18,7 @@ function CheckoutContent() {
 
   const rawPlan = params.get("plan");
   const data = useMemo(() => getPlan(rawPlan), [rawPlan]);
+  const promo = isPromoActive();
 
   useEffect(() => {
     const supabase = createClient();
@@ -58,7 +60,22 @@ function CheckoutContent() {
 
   return (
     <main className="max-w-6xl mx-auto px-6 py-14">
-      <div className="grid lg:grid-cols-2 gap-12">
+      {promo && (
+        <section className="soft-card p-10 text-center mb-10 border-2 border-green-200 bg-green-50/30">
+          <div className="text-4xl mb-3">🎉</div>
+          <h2 className="text-3xl text-[#4a3f44] mb-2 font-semibold">
+            Everything is Free Right Now!
+          </h2>
+          <p className="text-[#7b6870] text-lg mb-6">
+            During our launch promo, all programs are 100% free. No payment needed — just start your journey.
+          </p>
+          <Link href="/quiz" className="btn-primary inline-block">
+            Start Free Now
+          </Link>
+        </section>
+      )}
+
+      <div className={`grid lg:grid-cols-2 gap-12 ${promo ? "opacity-30 grayscale pointer-events-none select-none" : ""}`}>
         {/* LEFT: Order Summary */}
         <section className="space-y-8">
           <div>

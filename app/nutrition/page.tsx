@@ -5,6 +5,7 @@ import {
   calculateNutrition,
   getDayMealPlan,
 } from "@/lib/nutrition";
+import { isPromoActive } from "@/lib/promo";
 
 export default function NutritionPage() {
   const [saved, setSaved] =
@@ -66,7 +67,7 @@ export default function NutritionPage() {
     const premiumFlag = localStorage.getItem("premium") === "true";
     const expiryDate = localStorage.getItem("expiryDate");
     const isActive = premiumFlag && (!expiryDate || new Date(expiryDate) > new Date());
-    setIsPremium(isActive && (plan === "glow" || plan === "elite"));
+    setIsPremium(isPromoActive() || (isActive && (plan === "glow" || plan === "elite")));
   }, []);
 
   return (

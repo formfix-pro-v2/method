@@ -1,3 +1,5 @@
+import { isPromoActive } from "./promo";
+
 export type MembershipPlan = "free" | "glow" | "elite";
 type MembershipStatus = "active" | "expired" | "none";
 
@@ -94,6 +96,17 @@ export function getMembership(): MembershipData {
       purchaseDate: null,
       expiryDate: null,
       daysRemaining: 0,
+    };
+  }
+
+  // Promo mode: treat everyone as elite with unlimited access
+  if (isPromoActive()) {
+    return {
+      plan: "elite",
+      status: "active",
+      purchaseDate: null,
+      expiryDate: null,
+      daysRemaining: 999,
     };
   }
 

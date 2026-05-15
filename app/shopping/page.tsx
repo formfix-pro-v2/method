@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { calculateNutrition, getDayMealPlan } from "@/lib/nutrition";
 import PrintButton from "@/components/PrintButton";
+import { isPromoActive } from "@/lib/promo";
 
 type GroceryItem = {
   name: string;
@@ -115,6 +116,7 @@ export default function ShoppingPage() {
   const weeklyBudget = (nutrition.dailyBudget * days).toFixed(2);
 
   const isPremium = (() => {
+    if (isPromoActive()) return true;
     const premiumFlag = typeof window !== "undefined" && localStorage.getItem("premium") === "true";
     const expiryDate = typeof window !== "undefined" ? localStorage.getItem("expiryDate") : null;
     const isActive = premiumFlag && (!expiryDate || new Date(expiryDate) > new Date());
