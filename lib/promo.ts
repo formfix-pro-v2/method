@@ -5,7 +5,7 @@
 // To enable payments, set PROMO_MODE = false.
 // ============================================================
 
-export const PROMO_MODE = true;
+export const PROMO_MODE = false;
 
 // Optional: set a promo end date (null = indefinite)
 // When set, promo automatically ends after this date
