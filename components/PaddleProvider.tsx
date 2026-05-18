@@ -16,8 +16,7 @@ export default function PaddleProvider() {
     script.src = "https://cdn.paddle.com/paddle/v2/paddle.js";
     script.async = true;
     script.onload = () => {
-      // @ts-expect-error Paddle is injected on window
-      const Paddle = window.Paddle;
+      const Paddle = (window as any).Paddle;
       if (Paddle && typeof Paddle.Initialize === "function") {
         const env = process.env.NEXT_PUBLIC_PADDLE_ENV || "sandbox";
         if (env === "sandbox") {
