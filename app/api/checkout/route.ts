@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
-import { createCheckout, LEMON_PLANS } from "@/lib/lemonsqueezy";
 import { createClient } from "@/lib/supabase/server";
+import { PADDLE_PLANS } from "@/lib/paddle";
 
 export const dynamic = "force-dynamic";
 
+// POST /api/checkout - Returns Paddle price ID for client-side checkout
+// Paddle uses client-side overlay checkout, so this just validates and returns config
 export async function POST(request: Request) {
   const supabase = await createClient();
 
@@ -18,22 +20,19 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
   }
 
-  const plan = LEMON_PLANS[planId];
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const plan = PADDLE_PLANS[planId];
 
-  try {
-    const checkoutUrl = await createCheckout(plan.variantId, {
-      email: user?.email || undefined,
-      userId: user?.id || "",
-      plan: planId,
-      successUrl: `${appUrl}/checkout/success?plan=${planId}`,
-      cancelUrl: `${appUrl}/checkout?plan=${planId}`,
-    });
-
-    return NextResponse.json({ url: checkoutUrl });
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Checkout error";
-    console.error("Checkout error:", message);
-    return NextResponse.json({ error: message }, { status: 500 });
+  if (!plan.priceId) {
+    return NextResponse.json(
+      { error: "Price ID not configured for this plan" },
+      { status: 500 }
+    );
   }
+
+  return NextResponse.json({
+    priceId: plan.priceId,
+    planName: plan.name,
+    email: user?.email || null,
+    userId: user?.id || null,
+  });
 }

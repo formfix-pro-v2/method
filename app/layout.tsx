@@ -4,6 +4,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import PageTransition from "@/components/PageTransition";
 import ClientShell from "@/components/ClientShell";
+import PaddleProvider from "@/components/PaddleProvider";
 
 export const metadata: Metadata = {
   title: {
@@ -140,6 +141,7 @@ export default function RootLayout({
 
           <Footer />
           <ClientShell />
+          <PaddleProvider />
         </div>
       </body>
     </html>

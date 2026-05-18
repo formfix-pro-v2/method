@@ -1,4 +1,4 @@
-// Billing utilities — LemonSqueezy integration
+// Billing utilities — Paddle integration
 
 export async function startCheckout(plan: "glow" | "elite") {
   return {

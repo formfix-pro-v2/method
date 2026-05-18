@@ -65,7 +65,7 @@ export default function TermsPage() {
           <div>
             <h2 className="text-xl text-[#4a3f44] mb-3">5. Payments</h2>
             <ul className="space-y-2 ml-4">
-              <li>Payments are processed securely by LemonSqueezy.</li>
+              <li>Payments are processed securely by Paddle.</li>
               <li>Prices are in EUR and include applicable taxes.</li>
               <li>You will receive a receipt via email after purchase.</li>
             </ul>

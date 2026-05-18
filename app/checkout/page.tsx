@@ -9,16 +9,26 @@ import { createClient } from "@/lib/supabase/client";
 import { isPromoActive } from "@/lib/promo";
 import type { User } from "@supabase/supabase-js";
 
+declare global {
+  interface Window {
+    Paddle?: {
+      Checkout: {
+        open: (options: Record<string, unknown>) => void;
+      };
+    };
+  }
+}
+
 function CheckoutContent() {
   const params = useSearchParams();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState("");
+  const promo = isPromoActive();
 
   const rawPlan = params.get("plan");
   const data = useMemo(() => getPlan(rawPlan), [rawPlan]);
-  const promo = isPromoActive();
 
   useEffect(() => {
     const supabase = createClient();
@@ -27,35 +37,46 @@ function CheckoutContent() {
     });
   }, []);
 
-  async function handleCheckout() {
+  function handlePaddleCheckout() {
     if (!user) {
       router.push(`/login?redirect=/checkout?plan=${data.id}`);
+      return;
+    }
+
+    const Paddle = window.Paddle;
+    if (!Paddle) {
+      setError("Payment system is loading. Please try again in a moment.");
       return;
     }
 
     setLoading(true);
     setError("");
 
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: data.id }),
-      });
+    const priceId = data.id === "elite"
+      ? process.env.NEXT_PUBLIC_PADDLE_ELITE_PRICE_ID
+      : process.env.NEXT_PUBLIC_PADDLE_GLOW_PRICE_ID;
 
-      const result = await res.json();
-
-      if (result.url) {
-        // Redirect to Lemon Squeezy Checkout
-        window.location.href = result.url;
-      } else {
-        setError(result.error || "Something went wrong");
-        setLoading(false);
-      }
-    } catch {
-      setError("Connection error. Please try again.");
+    if (!priceId) {
+      setError("Payment not configured. Please contact support.");
       setLoading(false);
+      return;
     }
+
+    Paddle.Checkout.open({
+      items: [{ priceId, quantity: 1 }],
+      customer: { email: user.email },
+      customData: {
+        user_id: user.id,
+        plan: data.id,
+      },
+      settings: {
+        successUrl: `${window.location.origin}/checkout/success?plan=${data.id}`,
+        displayMode: "overlay",
+        theme: "light",
+      },
+    });
+
+    setLoading(false);
   }
 
   return (
@@ -163,59 +184,56 @@ function CheckoutContent() {
               )}
 
               <button
-                onClick={handleCheckout}
+                onClick={handlePaddleCheckout}
                 disabled={loading}
                 className="btn-primary w-full py-5 text-lg shadow-lg disabled:opacity-60 transition-all active:scale-[0.98]"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
                     <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Redirecting to payment...
+                    Opening checkout...
                   </span>
                 ) : (
                   `Pay €${data.price} — Secure Checkout`
                 )}
               </button>
 
-              <div className="mt-4 grid grid-cols-3 gap-4 opacity-40 grayscale contrast-125">
+              <div className="mt-4 grid grid-cols-4 gap-3 opacity-40 grayscale contrast-125">
                 <div className="text-[10px] text-center font-bold border rounded p-1">VISA</div>
                 <div className="text-[10px] text-center font-bold border rounded p-1">MASTERCARD</div>
                 <div className="text-[10px] text-center font-bold border rounded p-1">PAYPAL</div>
+                <div className="text-[10px] text-center font-bold border rounded p-1">APPLE PAY</div>
               </div>
 
               <p className="text-[11px] text-[#b98fa1] text-center leading-relaxed">
-                You&apos;ll be redirected to our secure payment page.
+                Secure payment powered by Paddle. Tax included where applicable.
               </p>
 
-              {/* Dev bypass — aktiviraj plan bez plaćanja */}
-              <div className="mt-6 pt-6 border-t border-dashed border-[#f0e3e8]">
-                <p className="text-[10px] text-[#b98fa1] text-center mb-3 uppercase tracking-widest font-bold">
-                  ⚙️ Dev / Test Mode
-                </p>
-                <button
-                  onClick={async () => {
-                    setLoading(true);
-                    setError("");
-                    try {
-                      // Aktiviraj lokalno
-                      activatePlan(data.id);
-                      // Pokušaj i na serveru
-                      await activateSubscription(data.id);
-                      router.push("/checkout/success?plan=" + data.id);
-                    } catch {
-                      // Ako server ne radi, lokalna aktivacija je dovoljna
-                      router.push("/checkout/success?plan=" + data.id);
-                    }
-                  }}
-                  disabled={loading}
-                  className="w-full py-3 rounded-2xl border-2 border-dashed border-[#d8a7b5] text-[#d8a7b5] text-sm font-medium hover:bg-[#fdf2f5] transition-all disabled:opacity-40"
-                >
-                  {loading ? "Activating..." : `⚡ Activate ${data.name} (Skip Payment)`}
-                </button>
-                <p className="text-[9px] text-[#b98fa1]/60 text-center mt-2">
-                  Ovo dugme preskače plaćanje i direktno aktivira plan. Samo za testiranje.
-                </p>
-              </div>
+              {/* Dev bypass — activate plan without payment */}
+              {process.env.NEXT_PUBLIC_PADDLE_ENV === "sandbox" && (
+                <div className="mt-6 pt-6 border-t border-dashed border-[#f0e3e8]">
+                  <p className="text-[10px] text-[#b98fa1] text-center mb-3 uppercase tracking-widest font-bold">
+                    ⚙️ Sandbox / Test Mode
+                  </p>
+                  <button
+                    onClick={async () => {
+                      setLoading(true);
+                      setError("");
+                      try {
+                        activatePlan(data.id);
+                        await activateSubscription(data.id);
+                        router.push("/checkout/success?plan=" + data.id);
+                      } catch {
+                        router.push("/checkout/success?plan=" + data.id);
+                      }
+                    }}
+                    disabled={loading}
+                    className="w-full py-3 rounded-2xl border-2 border-dashed border-[#d8a7b5] text-[#d8a7b5] text-sm font-medium hover:bg-[#fdf2f5] transition-all disabled:opacity-40"
+                  >
+                    {loading ? "Activating..." : `⚡ Activate ${data.name} (Skip Payment)`}
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </section>

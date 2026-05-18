@@ -25,7 +25,7 @@ export default function PrivacyPage() {
               <li><strong>Account data:</strong> Email address and encrypted password for authentication.</li>
               <li><strong>Assessment data:</strong> Age, height, weight, activity level, symptoms, and goals from your wellness quiz.</li>
               <li><strong>Usage data:</strong> Daily check-ins (sleep, energy, stress scores), completed sessions, journal entries, and favorites.</li>
-              <li><strong>Payment data:</strong> Processed securely by LemonSqueezy. We never store your card details.</li>
+              <li><strong>Payment data:</strong> Processed securely by Paddle. We never store your card details.</li>
               <li><strong>Device data:</strong> Browser type and push notification subscription (if enabled).</li>
             </ul>
           </div>
@@ -80,7 +80,7 @@ export default function PrivacyPage() {
             <h2 className="text-xl text-[#4a3f44] mb-3">6. Third-Party Services</h2>
             <ul className="space-y-2 ml-4">
               <li><strong>Supabase:</strong> Authentication and database (EU servers).</li>
-              <li><strong>LemonSqueezy:</strong> Payment processing (PCI compliant).</li>
+              <li><strong>Paddle:</strong> Payment processing (PCI compliant, merchant of record).</li>
               <li><strong>Vercel:</strong> Hosting and content delivery.</li>
               <li><strong>Resend:</strong> Transactional emails (if enabled).</li>
             </ul>
