@@ -56,7 +56,7 @@ export default function Footer() {
               {[
                 ["Privacy Policy", "/privacy"],
                 ["Terms of Service", "/terms"],
-                ["Refund Policy", "/terms#refund"],
+                ["Refund Policy", "/refund"],
                 ["Contact", "/contact"],
                 ["Become an Affiliate", "/affiliate"],
               ].map(([label, href]) => (
