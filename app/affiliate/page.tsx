@@ -323,7 +323,7 @@ export default function AffiliatePage() {
             "Nutritionists",
             "Menopause advocates",
             "Wellness influencers",
-            "Personal trainers",
+            "Fitness professionals",
             "Women's health pros",
           ].map((role) => (
             <div key={role} className="p-3 rounded-xl bg-[#fdf2f5] border border-[#f0e3e8] text-center text-xs text-[#6f5a62]">

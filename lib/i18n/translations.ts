@@ -83,7 +83,7 @@ const sr: Record<string, string> = {
   "Water": "Voda",
 
   // Session
-  "Live Session": "Sesija uživo",
+  "Guided Session": "Aktivna sesija",
   "Exercise": "Vežba",
   "of": "od",
   "Session Complete!": "Sesija završena!",

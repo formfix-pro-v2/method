@@ -71,8 +71,19 @@ export default function TermsPage() {
             </ul>
           </div>
 
+          <div id="refund">
+            <h2 className="text-xl text-[#4a3f44] mb-3">6. Refund Policy</h2>
+            <ul className="space-y-2 ml-4">
+              <li>We offer a <strong>30-day money-back guarantee</strong> on all plans.</li>
+              <li>If you are not satisfied with the program, contact us within 30 days of purchase for a full refund.</li>
+              <li>Refund requests can be made via our Contact page or by emailing support.</li>
+              <li>Refunds are processed within 5-10 business days to your original payment method.</li>
+              <li>After 30 days, no refunds will be issued.</li>
+            </ul>
+          </div>
+
           <div>
-            <h2 className="text-xl text-[#4a3f44] mb-3">6. Intellectual Property</h2>
+            <h2 className="text-xl text-[#4a3f44] mb-3">7. Intellectual Property</h2>
             <p>
               All content (exercises, meal plans, recipes, text, images, code) is owned by Veronica Method.
               You may not copy, redistribute, or resell any content without written permission.
@@ -81,7 +92,7 @@ export default function TermsPage() {
           </div>
 
           <div>
-            <h2 className="text-xl text-[#4a3f44] mb-3">7. Affiliate Program</h2>
+            <h2 className="text-xl text-[#4a3f44] mb-3">8. Affiliate Program</h2>
             <ul className="space-y-2 ml-4">
               <li>Affiliates earn 25% commission on referred sales.</li>
               <li>Self-referrals are not permitted.</li>
@@ -91,7 +102,7 @@ export default function TermsPage() {
           </div>
 
           <div>
-            <h2 className="text-xl text-[#4a3f44] mb-3">8. Limitation of Liability</h2>
+            <h2 className="text-xl text-[#4a3f44] mb-3">9. Limitation of Liability</h2>
             <p>
               Veronica Method is provided &ldquo;as is&rdquo; without warranties. We are not liable for any
               injuries, health issues, or damages arising from use of our exercises, meal plans, or
@@ -100,7 +111,7 @@ export default function TermsPage() {
           </div>
 
           <div>
-            <h2 className="text-xl text-[#4a3f44] mb-3">9. Termination</h2>
+            <h2 className="text-xl text-[#4a3f44] mb-3">10. Termination</h2>
             <p>
               You may delete your account at any time from your Account page. We may terminate accounts
               that violate these terms. Upon termination, your data will be deleted per our Privacy Policy.
@@ -108,7 +119,7 @@ export default function TermsPage() {
           </div>
 
           <div>
-            <h2 className="text-xl text-[#4a3f44] mb-3">10. Changes</h2>
+            <h2 className="text-xl text-[#4a3f44] mb-3">11. Changes</h2>
             <p>
               We may update these terms from time to time. Continued use of the service after changes
               constitutes acceptance of the new terms.
@@ -116,7 +127,7 @@ export default function TermsPage() {
           </div>
 
           <div>
-            <h2 className="text-xl text-[#4a3f44] mb-3">11. Contact</h2>
+            <h2 className="text-xl text-[#4a3f44] mb-3">12. Contact</h2>
             <p>
               Questions about these terms? <Link href="/contact" className="text-[#a8687a] underline">Contact us</Link>.
             </p>

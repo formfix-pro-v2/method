@@ -337,7 +337,7 @@ export default function SessionPage() {
         <div className="p-10">
           <div className="flex items-center justify-center gap-3 mb-4">
             <p className="uppercase tracking-[0.25em] text-sm text-[#b98fa1]">
-              {t("Live Session")}
+              {t("Guided Session")}
             </p>
             <span className="text-[10px] px-3 py-1 rounded-full bg-[#fdf2f5] text-[#b98fa1] font-bold uppercase tracking-widest border border-[#f0e3e8]">
               {program.phase}
