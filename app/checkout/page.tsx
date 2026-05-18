@@ -25,6 +25,7 @@ function CheckoutContent() {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState("");
+  const [alreadyPremium, setAlreadyPremium] = useState(false);
   const promo = isPromoActive();
 
   const rawPlan = params.get("plan");
@@ -35,6 +36,15 @@ function CheckoutContent() {
     supabase.auth.getUser().then(({ data: { user: u } }) => {
       setUser(u);
     });
+
+    // Check if user already has an active plan
+    const premiumFlag = localStorage.getItem("premium") === "true";
+    const expiryDate = localStorage.getItem("expiryDate");
+    const isActive = premiumFlag && (!expiryDate || new Date(expiryDate) > new Date());
+    const plan = localStorage.getItem("plan");
+    if (isActive && (plan === "glow" || plan === "elite")) {
+      setAlreadyPremium(true);
+    }
   }, []);
 
   function handlePaddleCheckout() {
@@ -97,7 +107,22 @@ function CheckoutContent() {
         </section>
       )}
 
-      <div className={`grid lg:grid-cols-2 gap-12 ${promo ? "opacity-30 grayscale pointer-events-none select-none" : ""}`}>
+      {alreadyPremium && !promo && (
+        <section className="soft-card p-10 text-center mb-10 border-2 border-[#d8a7b5]/30 bg-[#fdf2f5]">
+          <div className="text-4xl mb-3">✨</div>
+          <h2 className="text-3xl text-[#4a3f44] mb-2 font-semibold">
+            You Already Have an Active Plan
+          </h2>
+          <p className="text-[#7b6870] text-lg mb-6">
+            Your premium access is currently active. No need to purchase again — enjoy your program!
+          </p>
+          <Link href="/dashboard" className="btn-primary inline-block">
+            Go to Dashboard
+          </Link>
+        </section>
+      )}
+
+      <div className={`grid lg:grid-cols-2 gap-12 ${promo || alreadyPremium ? "opacity-30 grayscale pointer-events-none select-none" : ""}`}>
         {/* LEFT: Order Summary */}
         <section className="space-y-8">
           <div>
