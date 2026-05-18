@@ -17,11 +17,14 @@ export default function PaddleProvider() {
     script.async = true;
     script.onload = () => {
       // @ts-expect-error Paddle is injected on window
-      if (window.Paddle && typeof window.Paddle.Initialize === "function") {
-        // @ts-expect-error
-        window.Paddle.Initialize({
+      const Paddle = window.Paddle;
+      if (Paddle && typeof Paddle.Initialize === "function") {
+        const env = process.env.NEXT_PUBLIC_PADDLE_ENV || "sandbox";
+        if (env === "sandbox") {
+          Paddle.Environment.set("sandbox");
+        }
+        Paddle.Initialize({
           token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN,
-          environment: process.env.NEXT_PUBLIC_PADDLE_ENV || "sandbox",
         });
       }
     };

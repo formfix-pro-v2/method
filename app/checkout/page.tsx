@@ -65,12 +65,13 @@ function CheckoutContent() {
     Paddle.Checkout.open({
       items: [{ priceId, quantity: 1 }],
       customer: { email: user.email },
-      customData: {
+      customData: JSON.stringify({
         user_id: user.id,
         plan: data.id,
-      },
+      }),
       settings: {
         successUrl: `${window.location.origin}/checkout/success?plan=${data.id}`,
+        allowLogout: true,
         displayMode: "overlay",
         theme: "light",
       },
