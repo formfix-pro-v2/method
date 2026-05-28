@@ -15,6 +15,8 @@ import { useTranslation } from "@/lib/i18n/useTranslation";
 import { playComplete } from "@/lib/sounds";
 import { isPromoActive } from "@/lib/promo";
 import SectionErrorBoundary from "@/components/SectionErrorBoundary";
+import { DAILY_SUPPLEMENTS, type DailySupp } from "@/lib/data/supplements";
+import { DAILY_TEAS, type DailyTea } from "@/lib/data/teas";
 
 type QuizData = {
   name?: string;
@@ -48,53 +50,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   pelvic: "Pelvic Floor",
   posture: "Posture",
 };
-
-type DailySupp = {
-  name: string;
-  icon: string;
-  dose: string;
-  timing: string;
-  priority: "essential" | "recommended";
-  symptoms: string[];
-};
-
-const DAILY_SUPPLEMENTS: DailySupp[] = [
-  { name: "Vitamin D3", icon: "☀️", dose: "2,000–4,000 IU", timing: "With breakfast", priority: "essential", symptoms: [] },
-  { name: "Magnesium Glycinate", icon: "🌙", dose: "300–400mg", timing: "Before bed", priority: "essential", symptoms: ["Poor sleep", "Joint pain", "Mood swings", "Incontinence"] },
-  { name: "Omega-3 (EPA/DHA)", icon: "🐟", dose: "1,000–2,000mg", timing: "With meal", priority: "essential", symptoms: ["Joint pain", "Hot flashes", "Mood swings"] },
-  { name: "Calcium", icon: "🦴", dose: "500–600mg", timing: "2× with meals", priority: "essential", symptoms: ["Joint pain", "Back pain"] },
-  { name: "Vitamin B Complex", icon: "⚡", dose: "1 capsule", timing: "With breakfast", priority: "recommended", symptoms: ["Low energy", "Mood swings", "Low confidence"] },
-  { name: "Ashwagandha", icon: "🌿", dose: "300–600mg", timing: "Morning or evening", priority: "recommended", symptoms: ["Poor sleep", "Mood swings", "Hot flashes", "Low confidence"] },
-  { name: "Vitamin K2 (MK-7)", icon: "🥬", dose: "100–200mcg", timing: "With Vitamin D3", priority: "recommended", symptoms: [] },
-  { name: "Probiotics", icon: "🦠", dose: "10–30B CFU", timing: "Empty stomach", priority: "recommended", symptoms: ["Bloating", "Mood swings", "Weight gain"] },
-  { name: "Vitamin C", icon: "🍊", dose: "500–1,000mg", timing: "With breakfast", priority: "recommended", symptoms: ["Pelvic prolapse", "Incontinence", "Joint pain"] },
-  { name: "Collagen Peptides", icon: "✨", dose: "10–15g", timing: "Morning, in water or smoothie", priority: "recommended", symptoms: ["Pelvic prolapse", "Incontinence", "Joint pain"] },
-  { name: "Zinc", icon: "🔩", dose: "15–30mg", timing: "With dinner", priority: "recommended", symptoms: ["Pelvic prolapse", "Low energy", "Incontinence"] },
-];
-
-// Evidence-based herbal teas matched to symptoms
-type DailyTea = {
-  name: string;
-  icon: string;
-  dose: string;
-  timing: string;
-  priority: "essential" | "recommended";
-  symptoms: string[];
-  evidence: string;
-};
-
-const DAILY_TEAS: DailyTea[] = [
-  { name: "Sage Tea", icon: "🌿", dose: "1–2 cups", timing: "Morning & afternoon", priority: "essential", symptoms: ["Hot flashes"], evidence: "RCT: reduced hot flash intensity after 1 week (Salvia officinalis)" },
-  { name: "Chamomile Tea", icon: "🌼", dose: "1–2 cups", timing: "Evening, 30 min before bed", priority: "essential", symptoms: ["Poor sleep", "Mood swings"], evidence: "RCT: improved sleep quality and reduced anxiety in menopausal women" },
-  { name: "Green Tea", icon: "🍵", dose: "2–3 cups", timing: "Morning & early afternoon", priority: "essential", symptoms: ["Weight gain", "Low energy"], evidence: "Meta-analysis: -1.2kg weight loss vs placebo over 12 weeks in postmenopausal women" },
-  { name: "Valerian Root Tea", icon: "🌱", dose: "1 cup", timing: "30–60 min before bed", priority: "recommended", symptoms: ["Poor sleep"], evidence: "Systematic review: improves sleep quality without morning drowsiness" },
-  { name: "Red Clover Tea", icon: "🌺", dose: "1–2 cups", timing: "Any time", priority: "recommended", symptoms: ["Hot flashes", "Mood swings"], evidence: "Contains isoflavones (phytoestrogens). Meta-analysis: reduces hot flash frequency" },
-  { name: "Nettle Tea", icon: "🌿", dose: "1–2 cups", timing: "With meals", priority: "recommended", symptoms: ["Low energy", "Joint pain"], evidence: "Rich in iron, calcium, magnesium. Supports bone density and reduces fatigue" },
-  { name: "Peppermint Tea", icon: "🍃", dose: "1–2 cups", timing: "After meals", priority: "recommended", symptoms: ["Bloating", "Hot flashes"], evidence: "Reduces bloating and digestive discomfort. Cooling effect helps hot flashes" },
-  { name: "Ginger Tea", icon: "🫚", dose: "1–2 cups", timing: "Morning or with meals", priority: "recommended", symptoms: ["Joint pain", "Bloating"], evidence: "Anti-inflammatory. RCT: reduces joint pain and stiffness comparable to ibuprofen" },
-  { name: "Hibiscus Tea", icon: "🌺", dose: "1–2 cups", timing: "Any time (cold or hot)", priority: "recommended", symptoms: ["Weight gain", "Hot flashes"], evidence: "Lowers blood pressure, rich in antioxidants. Cooling effect. Supports metabolism" },
-  { name: "Lemon Balm Tea", icon: "🍋", dose: "1–2 cups", timing: "Afternoon or evening", priority: "recommended", symptoms: ["Mood swings", "Poor sleep", "Low confidence"], evidence: "Reduces anxiety and improves mood. Mild sedative effect without drowsiness" },
-];
 
 function WeeklyMiniProgress({ currentDay }: { currentDay: number }) {
   const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];

@@ -10,7 +10,8 @@
     "lint": "next lint",
     "type-check": "tsc --noEmit",
     "test": "npx playwright test",
-    "test:ui": "npx playwright test --ui"
+    "test:ui": "npx playwright test --ui",
+    "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.2",

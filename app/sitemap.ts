@@ -25,8 +25,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/blog/confidence-posture-midlife`, lastModified: new Date("2025-03-01"), changeFrequency: "monthly", priority: 0.7 },
 
     // Utility pages
+    { url: `${base}/free-guide`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    { url: `${base}/download`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
     { url: `${base}/login`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
     { url: `${base}/contact`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.4 },
+    { url: `${base}/refund`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
     { url: `${base}/privacy`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
     { url: `${base}/terms`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
   ];
