@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { sendEmail, weeklyDigestEmail, winBackEmail } from "@/lib/email";
+import crypto from "crypto";
 
 export const dynamic = "force-dynamic";
 
@@ -13,11 +14,19 @@ export const dynamic = "force-dynamic";
  * Zaštićeno CRON_SECRET header-om.
  */
 export async function GET(request: Request) {
-  // Auth provera
+  // Auth provera (timing-safe)
   const authHeader = request.headers.get("authorization");
   const cronSecret = process.env.CRON_SECRET;
 
-  if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+  if (!cronSecret) {
+    return NextResponse.json({ error: "CRON_SECRET not configured" }, { status: 500 });
+  }
+
+  const token = authHeader?.replace("Bearer ", "") || "";
+  const isValid = token.length === cronSecret.length &&
+    crypto.timingSafeEqual(Buffer.from(token), Buffer.from(cronSecret));
+
+  if (!isValid) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

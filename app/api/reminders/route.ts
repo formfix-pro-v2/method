@@ -1,14 +1,19 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import crypto from "crypto";
 
 export const dynamic = "force-dynamic";
 
 // GET /api/reminders - Get users who need weekly reminders
 // This endpoint can be called by a cron job (e.g., Vercel Cron)
 export async function GET(request: Request) {
-  // Simple auth check via header
+  // Timing-safe auth check
   const authHeader = request.headers.get("authorization");
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET || ""}`) {
+  const cronSecret = process.env.CRON_SECRET || "";
+  const token = authHeader?.replace("Bearer ", "") || "";
+
+  if (!cronSecret || token.length !== cronSecret.length ||
+    !crypto.timingSafeEqual(Buffer.from(token), Buffer.from(cronSecret))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
