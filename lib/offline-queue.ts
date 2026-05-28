@@ -27,7 +27,9 @@ export async function resilientFetch(
         headers: options.headers || { "Content-Type": "application/json" },
         body: options.body || null,
       });
-      console.log("[offline-queue] Request queued for background sync:", url);
+      if (process.env.NODE_ENV === "development") {
+        console.log("[offline-queue] Request queued for background sync:", url);
+      }
     }
     return null;
   }

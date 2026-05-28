@@ -78,7 +78,6 @@ async function registerPushSubscription() {
     // VAPID public key za push notifikacije
     const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
     if (!vapidKey) {
-      console.log("[notifications] VAPID key not configured — skipping push registration");
       return;
     }
 
@@ -98,8 +97,6 @@ async function registerPushSubscription() {
         auth: subJson.keys?.auth,
       }),
     });
-
-    console.log("[notifications] Push subscription registered");
   } catch (err) {
     console.error("[notifications] Failed to register push:", err);
   }

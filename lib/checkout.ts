@@ -58,13 +58,18 @@ export function getPlan(id: string | null): PlanData {
   return plans.glow;
 }
 
-// ✅ POPRAVLJENO: Dodata provera da li smo u browseru pre koriscenja localStorage
+// Local-only plan activation (used for sandbox testing bypass)
 export function activatePlan(id: PlanType) {
-  // Proveri da li window objekat postoji (sto znaci da smo na klijentu/browseru)
-  if (typeof window !== "undefined") {
-    localStorage.setItem("premium", "true");
-    localStorage.setItem("plan", id);
-    localStorage.setItem("day", "1");
-    localStorage.setItem("purchaseDate", new Date().toISOString());
-  }
+  if (typeof window === "undefined") return;
+
+  const durationDays = id === "elite" ? 90 : 30;
+  const now = new Date();
+  const expiry = new Date(now);
+  expiry.setDate(expiry.getDate() + durationDays);
+
+  localStorage.setItem("premium", "true");
+  localStorage.setItem("plan", id);
+  localStorage.setItem("day", "1");
+  localStorage.setItem("purchaseDate", now.toISOString());
+  localStorage.setItem("expiryDate", expiry.toISOString());
 }
