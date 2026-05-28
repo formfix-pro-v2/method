@@ -59,8 +59,11 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icon-192.png" />
         <link rel="alternate" type="application/rss+xml" title="Veronica Method Blog" href="/feed.xml" />
         <link rel="dns-prefetch" href="https://yxzttbqkamyrfabdhgau.supabase.co" />
+        <link rel="preconnect" href="https://yxzttbqkamyrfabdhgau.supabase.co" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://cdn.paddle.com" />
+        <link rel="dns-prefetch" href="https://buy.paddle.com" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
         <meta name="theme-color" content="#a8687a" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -134,6 +137,12 @@ export default function RootLayout({
 
           <Header />
 
+          <noscript>
+            <div style={{ padding: "2rem", textAlign: "center", background: "#fdf2f5", borderBottom: "1px solid #f0e3e8" }}>
+              <p style={{ color: "#4a3f44" }}>JavaScript is required to use Veronica Method. Please enable JavaScript in your browser settings.</p>
+            </div>
+          </noscript>
+
           <main id="main-content" className="relative z-10 flex-1">
             <PageTransition>
               {children}
@@ -143,6 +152,8 @@ export default function RootLayout({
           <Footer />
           <ClientShell />
           <PaddleProvider />
+          {/* Accessibility: live region for dynamic announcements */}
+          <div aria-live="polite" aria-atomic="true" className="sr-only" id="a11y-announcer" />
         </div>
       </body>
     </html>
