@@ -29,21 +29,15 @@ jobs:
         env:
           TEST_BASE_URL: https://menopause-program.vercel.app
 
-      - name: Send failure email
+      - name: Create issue on failure
         if: failure()
-        uses: dawidd6/action-send-mail@v3
+        uses: actions/github-script@v7
         with:
-          server_address: smtp.gmail.com
-          server_port: 587
-          username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: "⚠️ Veronica Method - Nightly Tests FAILED"
-          body: |
-            Nightly health check tests have FAILED for menopause-program.vercel.app.
-            
-            Time: ${{ github.event.repository.updated_at }}
-            Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-            
-            Please check the test results and fix any issues.
-          to: majavujovicns021@gmail.com
-          from: Veronica Method Bot <noreply@veronicamethod.com>
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `⚠️ Nightly Health Check FAILED - ${new Date().toISOString().split('T')[0]}`,
+              body: `Nightly health check tests have **FAILED**.\n\n**Run:** https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}\n\nPlease check the test results and fix any issues.`,
+              labels: ['bug', 'automated']
+            })
