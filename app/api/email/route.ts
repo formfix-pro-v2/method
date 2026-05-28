@@ -1,14 +1,22 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { sendEmail, welcomeEmail, weeklyDigestEmail, winBackEmail } from "@/lib/email";
+import crypto from "crypto";
 
 export const dynamic = "force-dynamic";
+
+function timingSafeCompare(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  return crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
+}
 
 // POST /api/email — send an email (internal use)
 export async function POST(request: Request) {
   // Auth: either logged-in user or cron secret
   const authHeader = request.headers.get("authorization");
-  const isCron = authHeader === `Bearer ${process.env.CRON_SECRET || ""}`;
+  const cronSecret = process.env.CRON_SECRET || "";
+  const token = authHeader?.replace("Bearer ", "") || "";
+  const isCron = cronSecret.length > 0 && token.length > 0 && timingSafeCompare(token, cronSecret);
 
   if (!isCron) {
     const supabase = await createClient();

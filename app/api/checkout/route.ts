@@ -13,6 +13,10 @@ export async function POST(request: Request) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const body = await request.json();
   const planId = body.plan as "glow" | "elite";
 

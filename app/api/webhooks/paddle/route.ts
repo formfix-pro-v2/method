@@ -103,6 +103,38 @@ export async function POST(req: NextRequest) {
       break;
     }
 
+    case "transaction.refunded": {
+      // Refund — revoke premium access
+      const customData = data?.custom_data || {};
+      const userId = customData.user_id;
+
+      if (userId) {
+        await supabase
+          .from("profiles")
+          .update({ premium: false, plan: "free", updated_at: new Date().toISOString() })
+          .eq("id", userId);
+
+        console.log(`[paddle webhook] Refunded — revoked access for user ${userId}`);
+      }
+      break;
+    }
+
+    case "subscription.updated": {
+      // Plan change or renewal
+      const customData = data?.custom_data || {};
+      const userId = customData.user_id;
+
+      if (userId && data?.status === "active") {
+        await supabase
+          .from("profiles")
+          .update({ premium: true, updated_at: new Date().toISOString() })
+          .eq("id", userId);
+
+        console.log(`[paddle webhook] Subscription updated for user ${userId}`);
+      }
+      break;
+    }
+
     default:
       console.log(`[paddle webhook] Unhandled event: ${eventType}`);
   }

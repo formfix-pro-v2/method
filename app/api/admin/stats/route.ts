@@ -15,6 +15,12 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // Admin authorization check
+  const adminEmails = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || "").split(",").map(e => e.trim().toLowerCase());
+  if (!user.email || !adminEmails.includes(user.email.toLowerCase())) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
   // ---- Fetch all data in parallel ----
   const [profilesRes, checkinsRes, sessionsRes, journalRes] = await Promise.all([
     supabase.from("profiles").select("*").order("created_at", { ascending: false }).limit(500),
