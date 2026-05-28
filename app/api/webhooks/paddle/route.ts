@@ -45,9 +45,32 @@ export async function POST(req: NextRequest) {
 
   const payload = JSON.parse(rawBody);
   const eventType = payload.event_type;
+  const eventId = payload.event_id || payload.notification_id || "";
   const data = payload.data;
 
-  console.log(`[paddle webhook] ${eventType}`, data?.id);
+  console.log(`[paddle webhook] ${eventType} (${eventId})`, data?.id);
+
+  // Idempotency: skip if we've already processed this event
+  if (eventId && typeof globalThis !== "undefined") {
+    const processedKey = `paddle_event_${eventId}`;
+    // @ts-expect-error global cache for idempotency
+    if (!globalThis.__paddleProcessed) globalThis.__paddleProcessed = new Set();
+    // @ts-expect-error
+    if (globalThis.__paddleProcessed.has(processedKey)) {
+      console.log(`[paddle webhook] Already processed ${eventId}, skipping`);
+      return NextResponse.json({ ok: true, skipped: true });
+    }
+    // @ts-expect-error
+    globalThis.__paddleProcessed.add(processedKey);
+    // Clean up old entries (keep last 1000)
+    // @ts-expect-error
+    if (globalThis.__paddleProcessed.size > 1000) {
+      // @ts-expect-error
+      const first = globalThis.__paddleProcessed.values().next().value;
+      // @ts-expect-error
+      globalThis.__paddleProcessed.delete(first);
+    }
+  }
 
   const supabase = await createClient();
 

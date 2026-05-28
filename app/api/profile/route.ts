@@ -38,6 +38,10 @@ export async function GET(request: Request) {
       email: user.email,
     },
     profile: profile || null,
+  }, {
+    headers: {
+      "Cache-Control": "private, max-age=30, stale-while-revalidate=60",
+    },
   });
 }
 
