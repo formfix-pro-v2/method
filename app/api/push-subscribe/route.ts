@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { checkRateLimit, getRateLimitKey, rateLimitResponse, WRITE_LIMIT } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
 // POST /api/push-subscribe — sačuvaj push subscription
 export async function POST(request: Request) {
+  const rlKey = getRateLimitKey(request, "push-subscribe");
+  const rl = checkRateLimit(rlKey, WRITE_LIMIT);
+  if (!rl.allowed) return rateLimitResponse(rl.resetAt);
+
   const supabase = await createClient();
   const { data: { user }, error: authError } = await supabase.auth.getUser();
 
@@ -17,6 +22,16 @@ export async function POST(request: Request) {
 
   if (!endpoint || !p256dh || !auth) {
     return NextResponse.json({ error: "endpoint, p256dh and auth are required" }, { status: 400 });
+  }
+
+  // Validate endpoint is a proper push service URL
+  if (typeof endpoint !== "string" || !endpoint.startsWith("https://") || endpoint.length > 2000) {
+    return NextResponse.json({ error: "Invalid endpoint URL" }, { status: 400 });
+  }
+
+  // Validate key lengths
+  if (typeof p256dh !== "string" || p256dh.length > 500 || typeof auth !== "string" || auth.length > 500) {
+    return NextResponse.json({ error: "Invalid key format" }, { status: 400 });
   }
 
   const { error } = await supabase

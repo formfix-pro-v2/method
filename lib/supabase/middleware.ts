@@ -63,7 +63,9 @@ export async function updateSession(request: NextRequest) {
 
   // Redirect logged-in users away from login page
   if (request.nextUrl.pathname === "/login" && user) {
-    const redirect = request.nextUrl.searchParams.get("redirect") || "/dashboard";
+    const rawRedirect = request.nextUrl.searchParams.get("redirect") || "/dashboard";
+    // Prevent open redirect — only allow relative paths
+    const redirect = rawRedirect.startsWith("/") && !rawRedirect.startsWith("//") ? rawRedirect : "/dashboard";
     const url = request.nextUrl.clone();
     url.pathname = redirect;
     url.searchParams.delete("redirect");

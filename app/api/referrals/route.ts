@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { checkRateLimit, getRateLimitKey, rateLimitResponse, WRITE_LIMIT } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -34,6 +35,10 @@ export async function GET() {
 
 // POST /api/referrals — registruj da je korisnik došao preko referral linka
 export async function POST(request: Request) {
+  const rlKey = getRateLimitKey(request, "referrals");
+  const rl = checkRateLimit(rlKey, WRITE_LIMIT);
+  if (!rl.allowed) return rateLimitResponse(rl.resetAt);
+
   const supabase = await createClient();
   const { data: { user }, error: authError } = await supabase.auth.getUser();
 
@@ -44,21 +49,28 @@ export async function POST(request: Request) {
   const body = await request.json();
   const { referral_code } = body;
 
-  if (!referral_code) {
-    return NextResponse.json({ error: "referral_code is required" }, { status: 400 });
+  if (!referral_code || typeof referral_code !== "string" || referral_code.length > 50) {
+    return NextResponse.json({ error: "Invalid referral code" }, { status: 400 });
   }
 
-  // Nađi referrer-a po kodu (kod je VM-XXXXXXXX gde je XXXXXXXX prvih 8 karaktera user ID-ja)
-  const shortId = referral_code.replace("VM-", "").toLowerCase();
+  // Validate format: VM-XXXXXXXX
+  const match = referral_code.match(/^VM-([a-f0-9]{8})$/i);
+  if (!match) {
+    return NextResponse.json({ error: "Invalid referral code format" }, { status: 400 });
+  }
 
-  // Traži profil čiji ID počinje sa tim karakterima
+  const shortId = match[1].toLowerCase();
+
+  // Search for referrer using ilike on ID prefix (more efficient than loading all)
   const { data: profiles } = await supabase
     .from("profiles")
     .select("id")
-    .limit(100);
+    .ilike("id", `${shortId}%`)
+    .limit(5);
 
+  // Also check without dashes
   const referrer = profiles?.find((p) =>
-    p.id.replace(/-/g, "").substring(0, 8).toLowerCase() === shortId.toLowerCase()
+    p.id.replace(/-/g, "").substring(0, 8).toLowerCase() === shortId
   );
 
   if (!referrer) {
