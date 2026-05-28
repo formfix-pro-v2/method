@@ -7,6 +7,7 @@ import ClientShell from "@/components/ClientShell";
 import PaddleProvider from "@/components/PaddleProvider";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://menopause-program.vercel.app"),
   title: {
     default: "Veronica Method | The Complete Menopause Program",
     template: "%s | Veronica Method",
@@ -14,6 +15,9 @@ export const metadata: Metadata = {
   description:
     "The complete menopause program: personalized exercises, budget meal plans under €7/day, supplement guide and daily support for women after 40.",
   manifest: "/manifest.json",
+  alternates: {
+    canonical: "/",
+  },
   keywords: [
     "menopause program",
     "menopause exercises",
@@ -88,8 +92,9 @@ export default function RootLayout({
               name: "Veronica Method",
               description:
                 "The complete menopause program: personalized exercises, budget meal plans and supplement guidance for women after 40.",
-              url: "https://veronica-method.vercel.app",
+              url: "https://menopause-program.vercel.app",
               applicationCategory: "HealthApplication",
+              operatingSystem: "Web, Android, iOS",
               offers: [
                 {
                   "@type": "Offer",
@@ -106,6 +111,24 @@ export default function RootLayout({
                   description: "90-day premium transformation program",
                 },
               ],
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Veronica Method",
+              url: "https://menopause-program.vercel.app",
+              logo: "https://menopause-program.vercel.app/icon-512.png",
+              sameAs: ["https://instagram.com/veronica_menopause_program"],
+              contactPoint: {
+                "@type": "ContactPoint",
+                contactType: "customer service",
+                url: "https://menopause-program.vercel.app/contact",
+              },
             }),
           }}
         />
