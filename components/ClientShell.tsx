@@ -14,6 +14,7 @@ const SyncProvider = dynamic(() => import("@/components/SyncProvider"), { ssr: f
 const OfflineIndicator = dynamic(() => import("@/components/OfflineIndicator"), { ssr: false });
 const WaterReminder = dynamic(() => import("@/components/WaterReminder"), { ssr: false });
 const ExerciseReminder = dynamic(() => import("@/components/ExerciseReminder"), { ssr: false });
+const DevToolsBlocker = dynamic(() => import("@/components/DevToolsBlocker"), { ssr: false });
 
 /**
  * Wrapper za sve client-only komponente koje se lazy loaduju.
@@ -34,6 +35,7 @@ export default function ClientShell() {
       <OfflineIndicator />
       <WaterReminder />
       <ExerciseReminder />
+      <DevToolsBlocker />
     </>
   );
 }
