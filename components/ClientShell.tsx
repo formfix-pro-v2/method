@@ -9,7 +9,6 @@ const CookieConsent = dynamic(() => import("@/components/CookieConsent"), { ssr:
 const NotificationPrompt = dynamic(() => import("@/components/NotificationPrompt"), { ssr: false });
 const SplashScreen = dynamic(() => import("@/components/SplashScreen"), { ssr: false });
 const DragScroll = dynamic(() => import("@/components/DragScroll"), { ssr: false });
-const SocialProof = dynamic(() => import("@/components/SocialProof"), { ssr: false });
 const SyncProvider = dynamic(() => import("@/components/SyncProvider"), { ssr: false });
 const OfflineIndicator = dynamic(() => import("@/components/OfflineIndicator"), { ssr: false });
 const WaterReminder = dynamic(() => import("@/components/WaterReminder"), { ssr: false });
@@ -30,7 +29,6 @@ export default function ClientShell() {
       <NotificationPrompt />
       <SplashScreen />
       <DragScroll />
-      <SocialProof />
       <SyncProvider />
       <OfflineIndicator />
       <WaterReminder />
