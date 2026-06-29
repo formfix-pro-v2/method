@@ -6,6 +6,10 @@ on:
     - cron: "0 2 * * *"
   workflow_dispatch: # Allow manual trigger
 
+permissions:
+  issues: write
+  contents: read
+
 jobs:
   health-check:
     runs-on: ubuntu-latest
@@ -16,7 +20,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
 
       - name: Install dependencies
         run: npm ci
