@@ -72,6 +72,18 @@ export default function SessionPage() {
     const savedVoice = localStorage.getItem("voiceGuide");
     if (savedVoice === "true") setVoiceGuide(true);
     try { const qd = JSON.parse(localStorage.getItem("quizData") || "{}"); if (qd.name) setUserName(qd.name); } catch {}
+
+    // Resume interrupted session
+    const savedSession = localStorage.getItem("activeSession");
+    if (savedSession) {
+      try {
+        const s = JSON.parse(savedSession);
+        if (s.day === Number(savedDay) && s.index > 0) {
+          setIndex(s.index);
+          setStarted(true);
+        }
+      } catch { /* ignore corrupt data */ }
+    }
   }, []);
 
   const program = useMemo(() => {
@@ -238,10 +250,15 @@ export default function SessionPage() {
     haptic("medium");
     setPaused(false);
     if (index < program.exercises.length - 1) {
-      setIndex((prev) => prev + 1);
+      const nextIndex = index + 1;
+      setIndex(nextIndex);
+      // Save progress so user can resume if they leave
+      localStorage.setItem("activeSession", JSON.stringify({ day, index: nextIndex }));
     } else {
       setFinished(true);
       setStarted(false);
+      // Clear saved session on completion
+      localStorage.removeItem("activeSession");
       // Advance day
       const nextDay = day + 1;
       localStorage.setItem("day", String(nextDay));

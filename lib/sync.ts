@@ -49,13 +49,20 @@ async function pullProfile(supabase: ReturnType<typeof createClient>, userId: st
 
   if (!data) return;
 
-  // Server wins for profile data
+  // Server wins for subscription data
   if (data.plan) localStorage.setItem("plan", data.plan);
   if (data.premium !== null) localStorage.setItem("premium", String(data.premium));
-  if (data.current_day) localStorage.setItem("day", String(data.current_day));
-  if (data.quiz_data) localStorage.setItem("quizData", JSON.stringify(data.quiz_data));
   if (data.purchase_date) localStorage.setItem("purchaseDate", data.purchase_date);
   if (data.expiry_date) localStorage.setItem("expiryDate", data.expiry_date);
+  if (data.quiz_data) localStorage.setItem("quizData", JSON.stringify(data.quiz_data));
+
+  // For day progression: use the higher value (user might have progressed offline)
+  if (data.current_day) {
+    const localDay = Number(localStorage.getItem("day") || "1");
+    const serverDay = data.current_day;
+    const resolvedDay = Math.max(localDay, serverDay);
+    localStorage.setItem("day", String(resolvedDay));
+  }
 }
 
 async function pullCheckins(supabase: ReturnType<typeof createClient>, userId: string) {

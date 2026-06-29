@@ -527,6 +527,22 @@ export default function DashboardPage() {
 
   return (
     <main className="max-w-6xl mx-auto px-6 py-6 bg-transparent">
+      {/* RESUME SESSION BANNER */}
+      {typeof window !== "undefined" && localStorage.getItem("activeSession") && (
+        <div className="mb-4 soft-card p-4 border-2 border-[#d8a7b5]/30 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">⏸️</span>
+            <div>
+              <p className="text-sm font-medium text-[#4a3f44]">Session in Progress</p>
+              <p className="text-xs text-[#7b6870]">You have an unfinished session. Pick up where you left off!</p>
+            </div>
+          </div>
+          <Link href="/session" className="btn-primary px-4 py-2 text-xs shrink-0">
+            Resume
+          </Link>
+        </div>
+      )}
+
       {/* HEADER */}
       <div className="mb-6">
         <div className="flex justify-between items-start mb-4">
