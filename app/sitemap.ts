@@ -17,6 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     // Blog
     { url: `${base}/blog`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
+    { url: `${base}/blog/dry-brushing-benefits`, lastModified: new Date("2026-06-29"), changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/blog/exercises-for-hot-flashes`, lastModified: new Date("2025-01-15"), changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/blog/menopause-meal-plan-budget`, lastModified: new Date("2025-01-20"), changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/blog/sleep-better-after-40`, lastModified: new Date("2025-02-01"), changeFrequency: "monthly", priority: 0.7 },

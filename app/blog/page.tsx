@@ -9,6 +9,15 @@ export const metadata: Metadata = {
 
 const articles = [
   {
+    slug: "dry-brushing-benefits",
+    title: "Dry Brushing: The 5-Minute Ritual That Transforms Your Skin & Circulation",
+    excerpt:
+      "How this ancient technique boosts lymphatic drainage, reduces cellulite, energizes your body and supports immunity — all in 5 minutes before your morning shower.",
+    category: "Wellness",
+    readTime: "6 min",
+    date: "2026-06-29",
+  },
+  {
     slug: "exercises-for-hot-flashes",
     title: "5 Gentle Exercises That Help Reduce Hot Flashes",
     excerpt:
