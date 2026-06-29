@@ -14,6 +14,7 @@ const OfflineIndicator = dynamic(() => import("@/components/OfflineIndicator"), 
 const WaterReminder = dynamic(() => import("@/components/WaterReminder"), { ssr: false });
 const ExerciseReminder = dynamic(() => import("@/components/ExerciseReminder"), { ssr: false });
 const DevToolsBlocker = dynamic(() => import("@/components/DevToolsBlocker"), { ssr: false });
+const GoogleTranslate = dynamic(() => import("@/components/GoogleTranslate"), { ssr: false });
 
 /**
  * Wrapper za sve client-only komponente koje se lazy loaduju.
@@ -34,6 +35,7 @@ export default function ClientShell() {
       <WaterReminder />
       <ExerciseReminder />
       <DevToolsBlocker />
+      <GoogleTranslate />
     </>
   );
 }

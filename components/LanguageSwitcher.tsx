@@ -18,8 +18,34 @@ export default function LanguageSwitcher() {
     setLocale(loc);
     localStorage.setItem("vm_locale", loc);
     setOpen(false);
-    // Reload to apply translations everywhere
-    window.location.reload();
+
+    if (loc === "en") {
+      // Reset to English — remove Google Translate
+      const iframe = document.querySelector(".goog-te-banner-frame") as HTMLIFrameElement;
+      if (iframe) {
+        const innerDoc = iframe.contentDocument || iframe.contentWindow?.document;
+        const closeBtn = innerDoc?.querySelector(".goog-close-link") as HTMLElement;
+        if (closeBtn) closeBtn.click();
+      }
+      // Also try via cookie reset
+      document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=." + window.location.hostname;
+      window.location.reload();
+    } else {
+      // Trigger Google Translate for non-English
+      const langMap: Record<string, string> = { sr: "sr", de: "de", es: "es" };
+      const targetLang = langMap[loc];
+      if (targetLang) {
+        const select = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
+        if (select) {
+          select.value = targetLang;
+          select.dispatchEvent(new Event("change"));
+        } else {
+          // Script not loaded yet, reload to trigger
+          window.location.reload();
+        }
+      }
+    }
   }
 
   return (
