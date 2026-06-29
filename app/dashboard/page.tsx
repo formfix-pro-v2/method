@@ -527,6 +527,19 @@ export default function DashboardPage() {
 
   return (
     <main className="max-w-6xl mx-auto px-6 py-6 bg-transparent">
+      {/* GUEST MODE BANNER */}
+      {typeof window !== "undefined" && localStorage.getItem("guestMode") === "true" && (
+        <div className="mb-4 soft-card p-4 bg-[#fdf2f5]/60 border border-dashed border-[#d8a7b5]/40 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="text-xl">👤</span>
+            <p className="text-xs text-[#7b6870]">
+              Guest mode — progress saved on this device only.{" "}
+              <Link href="/login?redirect=/dashboard" className="text-[#d8a7b5] underline">Create account</Link> to sync across devices.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* RESUME SESSION BANNER */}
       {typeof window !== "undefined" && localStorage.getItem("activeSession") && (
         <div className="mb-4 soft-card p-4 border-2 border-[#d8a7b5]/30 flex items-center justify-between">

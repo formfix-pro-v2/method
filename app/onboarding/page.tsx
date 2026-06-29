@@ -112,16 +112,18 @@ export default function OnboardingPage() {
             <Link href="/results" className="btn-primary px-8">
               View My Results
             </Link>
-            {isLoggedIn ? (
-              <Link href="/dashboard" className="btn-outline px-8">
-                Go to Dashboard
-              </Link>
-            ) : (
-              <Link href="/login?redirect=/dashboard" className="btn-outline px-8">
-                Sign In to Dashboard
-              </Link>
-            )}
+            <Link href="/dashboard" className="btn-outline px-8">
+              Go to Dashboard
+            </Link>
           </div>
+          {!isLoggedIn && (
+            <p className="text-xs text-[#b98fa1] mt-4">
+              <Link href="/login?redirect=/dashboard" className="underline">
+                Create an account
+              </Link>{" "}
+              to save progress across devices.
+            </p>
+          )}
           {plan === "free" && (
             <p className="text-xs text-[#b98fa1] mt-4">
               Free trial: 7 days of exercises + Day 1 full meals.{" "}

@@ -149,6 +149,34 @@ function LoginContent() {
             your account automatically.
           </p>
 
+          <div className="mt-4 pt-4 border-t border-[#f0e3e8]">
+            <button
+              onClick={() => {
+                localStorage.setItem("guestMode", "true");
+                if (!localStorage.getItem("quizData")) {
+                  localStorage.setItem("quizData", JSON.stringify({
+                    symptoms: ["Hot flashes", "Poor sleep", "Joint pain"],
+                    goal: "tone",
+                    activity: "light",
+                    age: "48",
+                    time: "20 min",
+                    sleep: 5,
+                  }));
+                }
+                if (!localStorage.getItem("day")) {
+                  localStorage.setItem("day", "1");
+                }
+                router.push(redirect);
+              }}
+              className="w-full py-3 rounded-full border-2 border-dashed border-[#d8a7b5]/50 text-[#8f5d6f] text-sm font-medium hover:bg-[#fdf2f5] transition-all"
+            >
+              Continue as Guest
+            </button>
+            <p className="text-[10px] text-[#b98fa1] text-center mt-2">
+              No account needed. Your progress stays on this device only.
+            </p>
+          </div>
+
           <div className="mt-4 text-center">
             <Link
               href="/"
